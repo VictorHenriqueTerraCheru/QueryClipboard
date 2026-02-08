@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação - Query Clipboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #263238;
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            color: #1976D2;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #1976D2;
+        }
+
+        h3 {
+            color: #1565C0;
+            font-size: 1.5em;
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            color: #424242;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: #c7254e;
+        }
+
+        pre {
+            background: #263238;
+            color: #aed581;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-left: 4px solid #1976D2;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        .highlight-box {
+            background: #E3F2FD;
+            border-left: 4px solid #2196F3;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #FFF3E0;
+            border-left: 4px solid #FF9800;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .success-box {
+            background: #E8F5E9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .error-box {
+            background: #FFEBEE;
+            border-left: 4px solid #F44336;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th {
+            background: #1976D2;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .diagram {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .file-tree {
+            background: #263238;
+            color: #aed581;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            line-height: 1.8;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        .badge-info { background: #2196F3; color: white; }
+        .badge-success { background: #4CAF50; color: white; }
+        .badge-warning { background: #FF9800; color: white; }
+        .badge-error { background: #F44336; color: white; }
+
+        footer {
+            background: #263238;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1976D2;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+
+        .back-to-top:hover {
+            background: #1565C0;
+            transform: translateY(-5px);
+        }
+
+        @media print {
+            nav, .back-to-top { display: none; }
+            .container { box-shadow: none; }
+            section { page-break-inside: avoid; }
+        }
+
+        @media (max-width: 768px) {
+            .content { padding: 20px; }
+            header { padding: 20px; }
+            h2 { font-size: 1.5em; }
+            nav ul { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Query Clipboard</h1>
+            <p>Documentação Técnica Completa</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#visao-geral">Visão Geral</a></li>
+                <li><a href="#arquitetura">Arquitetura</a></li>
+                <li><a href="#estrutura">Estrutura</a></li>
+                <li><a href="#modelos">Modelos</a></li>
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#interface">Interface</a></li>
+                <li><a href="#fluxo">Fluxo</a></li>
+                <li><a href="#atalho">Atalho Global</a></li>
+                <li><a href="#armazenamento">Armazenamento</a></li>
+                <li><a href="#manutencao">Manutenção</a></li>
+                <li><a href="#evolucao">Evolução</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <!-- VISÃO GERAL -->
+            <section id="visao-geral">
+                <h2>🎯 Visão Geral</h2>
+                
+                <h3>O que é?</h3>
+                <p>O <strong>Query Clipboard</strong> é uma aplicação desktop Windows (WPF) que permite:</p>
+                <ul>
+                    <li>Armazenar queries SQL usadas frequentemente</li>
+                    <li>Acessar rapidamente através de um atalho global (Ctrl+Alt+Q)</li>
+                    <li>Copiar queries para o clipboard com um clique</li>
+                    <li>Organizar queries por categorias</li>
+                    <li>Buscar queries por nome, conteúdo ou categoria</li>
+                    <li>Escolher entre armazenamento JSON (local) ou SQL Server</li>
+                </ul>
+
+                <h3>Tecnologias Utilizadas</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tecnologia</th>
+                            <th>Versão</th>
+                            <th>Propósito</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>.NET</td>
+                            <td>8.0</td>
+                            <td>Framework principal</td>
+                        </tr>
+                        <tr>
+                            <td>WPF</td>
+                            <td>-</td>
+                            <td>Interface gráfica</td>
+                        </tr>
+                        <tr>
+                            <td>XAML</td>
+                            <td>-</td>
+                            <td>Linguagem de marcação para UI</td>
+                        </tr>
+                        <tr>
+                            <td>C#</td>
+                            <td>12.0</td>
+                            <td>Linguagem de programação</td>
+                        </tr>
+                        <tr>
+                            <td>Newtonsoft.Json</td>
+                            <td>13.0.3</td>
+                            <td>Serialização JSON</td>
+                        </tr>
+                        <tr>
+                            <td>Microsoft.Data.SqlClient</td>
+                            <td>5.1.5</td>
+                            <td>Conexão com SQL Server</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- ARQUITETURA -->
+            <section id="arquitetura">
+                <h2>🏗️ Arquitetura do Sistema</h2>
+
+                <h3>Padrão Arquitetural</h3>
+                <p>O sistema utiliza uma <strong>arquitetura em camadas</strong> simples:</p>
+
+                <div class="diagram">
+┌─────────────────────────────────────┐
+│      APRESENTAÇÃO (UI)              │
+│  MainWindow, QueryEditor,           │
+│      SettingsWindow                 │
+├─────────────────────────────────────┤
+│       SERVIÇOS (LÓGICA)             │
+│ QueryRepository, HotkeyManager,     │
+│      SettingsService                │
+├─────────────────────────────────────┤
+│      MODELOS (DADOS)                │
+│ QueryItem, Category, AppSettings    │
+├─────────────────────────────────────┤
+│   ARMAZENAMENTO (PERSISTÊNCIA)      │
+│    JSON Files / SQL Server          │
+└─────────────────────────────────────┘
+                </div>
+
+                <h3>Princípios Aplicados</h3>
+                <div class="highlight-box">
+                    <ul>
+                        <li><strong>Separation of Concerns</strong> - Cada camada tem responsabilidade única</li>
+                        <li><strong>Repository Pattern</strong> - Abstração do acesso a dados via interface</li>
+                        <li><strong>Strategy Pattern</strong> - Troca entre JSON e SQL Server via interface comum</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ESTRUTURA DE PASTAS -->
+            <section id="estrutura">
+                <h2>📁 Estrutura de Pastas</h2>
+
+                <div class="file-tree">
+QueryClipboard/
+│
+├── QueryClipboard.sln              # Solution do Visual Studio
+│
+└── QueryClipboard/                 # Projeto principal
+    │
+    ├── Models/                     # Modelos de dados
+    │   └── Models.cs              # QueryItem, Category, AppSettings
+    │
+    ├── Services/                   # Lógica de negócio
+    │   ├── IQueryRepository.cs    # Interface do repositório
+    │   ├── JsonQueryRepository.cs # Implementação JSON
+    │   ├── SqlServerQueryRepository.cs # Implementação SQL Server
+    │   ├── HotkeyManager.cs       # Gerenciador de atalhos globais
+    │   └── SettingsService.cs     # Gerenciador de configurações
+    │
+    ├── Views/                      # Janelas da aplicação
+    │   ├── QueryEditorWindow.xaml(.cs)  # Editor de queries
+    │   └── SettingsWindow.xaml(.cs)     # Tela de configurações
+    │
+    ├── MainWindow.xaml(.cs)        # Janela principal (popup)
+    ├── App.xaml(.cs)              # Configuração da aplicação
+    └── QueryClipboard.csproj      # Arquivo do projeto
+                </div>
+            </section>
+
+            <!-- MODELOS DE DADOS -->
+            <section id="modelos">
+                <h2>📊 Modelos de Dados</h2>
+
+                <h3>1. QueryItem</h3>
+                <p>Representa uma query SQL armazenada.</p>
+
+                <pre><code>public class QueryItem
+{
+    public Guid Id { get; set; }              // ID único
+    public string Name { get; set; }          // Nome da query
+    public string SqlQuery { get; set; }      // Código SQL
+    public string Category { get; set; }      // Categoria
+    public string Description { get; set; }   // Descrição opcional
+    public DateTime CreatedAt { get; set; }   // Data de criação
+    public DateTime LastUsed { get; set; }    // Última vez usada
+    public int UsageCount { get; set; }       // Quantas vezes foi usada
+}</code></pre>
+
+                <div class="highlight-box">
+                    <strong>Onde é usado:</strong>
+                    <ul>
+                        <li>Exibido nos cards da MainWindow</li>
+                        <li>Editado no QueryEditorWindow</li>
+                        <li>Persistido no JSON ou SQL Server</li>
+                    </ul>
+                </div>
+
+                <h3>2. Category</h3>
+                <p>Representa uma categoria de queries.</p>
+
+                <pre><code>public class Category
+{
+    public string Name { get; set; }   // Nome da categoria (ex: "DBA")
+    public string Color { get; set; }  // Cor em hexadecimal (ex: "#2196F3")
+}</code></pre>
+
+                <h3>3. AppSettings</h3>
+                <p>Configurações globais da aplicação.</p>
+
+                <pre><code>public class AppSettings
+{
+    public string HotkeyModifier { get; set; }     // Ex: "Control+Alt"
+    public string HotkeyKey { get; set; }          // Ex: "Q"
+    public StorageMode StorageMode { get; set; }   // Json ou SqlServer
+    public string? ConnectionString { get; set; }  // Connection string SQL
+    public List&lt;Category&gt; Categories { get; set; } // Lista de categorias
+}
+
+public enum StorageMode
+{
+    Json,      // Armazena em arquivo JSON local
+    SqlServer  // Armazena no SQL Server
+}</code></pre>
+
+                <div class="success-box">
+                    <strong>Localização do arquivo:</strong><br>
+                    <code>%APPDATA%\QueryClipboard\settings.json</code>
+                </div>
+            </section>
+
+            <!-- SERVIÇOS -->
+            <section id="servicos">
+                <h2>🔧 Serviços</h2>
+
+                <h3>1. IQueryRepository (Interface)</h3>
+                <p><strong>Localização:</strong> <code>Services/IQueryRepository.cs</code></p>
+                <p><strong>Responsabilidade:</strong> Define o contrato para acesso aos dados de queries.</p>
+
+                <pre><code>public interface IQueryRepository
+{
+    Task&lt;List&lt;QueryItem&gt;&gt; GetAllQueriesAsync();
+    Task&lt;QueryItem?&gt; GetQueryByIdAsync(Guid id);
+    Task&lt;List&lt;QueryItem&gt;&gt; GetQueriesByCategoryAsync(string category);
+    Task AddQueryAsync(QueryItem query);
+    Task UpdateQueryAsync(QueryItem query);
+    Task DeleteQueryAsync(Guid id);
+    Task&lt;List&lt;QueryItem&gt;&gt; SearchQueriesAsync(string searchTerm);
+    Task IncrementUsageAsync(Guid id);
+}</code></pre>
+
+                <div class="highlight-box">
+                    <strong>💡 Por que existe:</strong> Permite trocar entre JSON e SQL Server sem mudar o código da UI.
+                </div>
+
+                <h3>2. JsonQueryRepository</h3>
+                <p><strong>Localização:</strong> <code>Services/JsonQueryRepository.cs</code></p>
+                <p><strong>Responsabilidade:</strong> Implementa armazenamento em arquivo JSON local.</p>
+
+                <h4>Arquivo de dados:</h4>
+                <pre><code>%APPDATA%\QueryClipboard\queries.json</code></pre>
+
+                <h4>Como funciona:</h4>
+                <ol>
+                    <li>No construtor, carrega queries do arquivo JSON</li>
+                    <li>Se o arquivo não existe, cria queries de exemplo</li>
+                    <li>Mantém as queries em memória (<code>List&lt;QueryItem&gt;</code>)</li>
+                    <li>A cada operação (Add, Update, Delete), salva tudo de volta no JSON</li>
+                </ol>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vantagens</th>
+                            <th>Desvantagens</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>✅ Simples e rápido</td>
+                            <td>❌ Não compartilha entre máquinas</td>
+                        </tr>
+                        <tr>
+                            <td>✅ Não precisa de banco de dados</td>
+                            <td>❌ Pode ter problemas com acesso concorrente</td>
+                        </tr>
+                        <tr>
+                            <td>✅ Fácil fazer backup (só copiar o arquivo)</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>3. SqlServerQueryRepository</h3>
+                <p><strong>Localização:</strong> <code>Services/SqlServerQueryRepository.cs</code></p>
+                <p><strong>Responsabilidade:</strong> Implementa armazenamento no SQL Server.</p>
+
+                <h4>Estrutura da tabela:</h4>
+                <pre><code>CREATE TABLE Queries (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    Name NVARCHAR(200) NOT NULL,
+    SqlQuery NVARCHAR(MAX) NOT NULL,
+    Category NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(500),
+    CreatedAt DATETIME2 DEFAULT GETDATE(),
+    LastUsed DATETIME2 DEFAULT GETDATE(),
+    UsageCount INT DEFAULT 0
+);
+
+-- Índices para performance
+CREATE INDEX IX_Queries_Category ON Queries(Category);
+CREATE INDEX IX_Queries_LastUsed ON Queries(LastUsed DESC);</code></pre>
+
+                <h3>4. HotkeyManager</h3>
+                <p><strong>Localização:</strong> <code>Services/HotkeyManager.cs</code></p>
+                <p><strong>Responsabilidade:</strong> Registra e gerencia o atalho global do Windows.</p>
+
+                <div class="warning-box">
+                    <strong>⚠️ Importante:</strong> O atalho funciona mesmo quando a janela está escondida!
+                </div>
+
+                <h4>Modificadores disponíveis:</h4>
+                <ul>
+                    <li><code>MOD_CONTROL</code> (0x0002) = Ctrl</li>
+                    <li><code>MOD_ALT</code> (0x0001) = Alt</li>
+                    <li><code>MOD_SHIFT</code> (0x0004) = Shift</li>
+                    <li><code>MOD_WIN</code> (0x0008) = Windows Key</li>
+                </ul>
+
+                <h3>5. SettingsService</h3>
+                <p><strong>Localização:</strong> <code>Services/SettingsService.cs</code></p>
+                <p><strong>Responsabilidade:</strong> Carrega e salva configurações da aplicação.</p>
+            </section>
+
+            <!-- INTERFACE -->
+            <section id="interface">
+                <h2>🖥️ Interface (Views)</h2>
+
+                <h3>1. MainWindow (Popup Principal)</h3>
+                <p><strong>Arquivos:</strong> <code>MainWindow.xaml</code> e <code>MainWindow.xaml.cs</code></p>
+
+                <h4>Características:</h4>
+                <ul>
+                    <li><code>WindowStyle="None"</code> - Sem borda do Windows</li>
+                    <li><code>AllowsTransparency="True"</code> - Permite cantos arredondados</li>
+                    <li><code>Topmost="True"</code> - Sempre fica por cima</li>
+                    <li><code>ShowInTaskbar="False"</code> - Não aparece na barra de tarefas</li>
+                </ul>
+
+                <h4>Componentes principais:</h4>
+                <div class="highlight-box">
+                    <ul>
+                        <li><strong>Header (Topo azul)</strong> - Logo, título, botões de configurações e fechar</li>
+                        <li><strong>Busca</strong> - TextBox com filtro em tempo real</li>
+                        <li><strong>Categorias</strong> - Botões coloridos gerados dinamicamente</li>
+                        <li><strong>Lista de Queries</strong> - Cards com informações completas</li>
+                        <li><strong>Footer</strong> - Contador de queries e botão de nova query</li>
+                    </ul>
+                </div>
+
+                <h4>Métodos importantes:</h4>
+                <pre><code>// Mostra o popup
+private void ShowPopup()
+
+// Carrega queries do repositório
+private async void LoadQueries()
+
+// Cria um card visual para cada query
+private Border CreateQueryCard(QueryItem query)
+
+// Copia query pro clipboard e esconde janela
+private async Task CopyQueryToClipboard(QueryItem query)
+
+// Filtra queries pela busca
+private async void SearchTextBox_TextChanged(...)
+
+// Filtra por categoria
+private void FilterByCategory(string? category)</code></pre>
+
+                <h3>2. QueryEditorWindow</h3>
+                <p><strong>Arquivos:</strong> <code>Views/QueryEditorWindow.xaml(.cs)</code></p>
+                <p><strong>Responsabilidade:</strong> Janela modal para criar/editar queries.</p>
+
+                <h4>Campos:</h4>
+                <ul>
+                    <li><strong>Nome</strong> - TextBox</li>
+                    <li><strong>Categoria</strong> - ComboBox editável</li>
+                    <li><strong>Descrição</strong> - TextBox opcional</li>
+                    <li><strong>SQL Query</strong> - TextBox multilinha com fonte Consolas</li>
+                </ul>
+
+                <h4>Validações:</h4>
+                <div class="error-box">
+                    <ul>
+                        <li>Nome obrigatório</li>
+                        <li>Categoria obrigatória</li>
+                        <li>Query SQL obrigatória</li>
+                    </ul>
+                </div>
+
+                <h3>3. SettingsWindow</h3>
+                <p><strong>Arquivos:</strong> <code>Views/SettingsWindow.xaml(.cs)</code></p>
+                <p><strong>Responsabilidade:</strong> Tela de configurações do sistema.</p>
+
+                <h4>Seções:</h4>
+                <ol>
+                    <li><strong>Modo de Armazenamento</strong> - JSON ou SQL Server</li>
+                    <li><strong>Atalho de Teclado</strong> - Mostra o atalho atual</li>
+                    <li><strong>Categorias</strong> - Gerenciamento de categorias</li>
+                </ol>
+            </section>
+
+            <!-- FLUXO DE FUNCIONAMENTO -->
+            <section id="fluxo">
+                <h2>🔄 Fluxo de Funcionamento</h2>
+
+                <h3>Fluxo 1: Inicialização do App</h3>
+                <div class="diagram">
+1. App.xaml.cs inicia
+   ↓
+2. MainWindow é criada
+   ↓
+3. No construtor:
+   - SettingsService carrega configurações
+   - Cria repositório baseado no StorageMode
+   - Cria HotkeyManager
+   ↓
+4. Evento Window_Loaded:
+   - Registra atalho Ctrl+Alt+Q no Windows
+   - Mostra MessageBox de boas-vindas
+   - Mostra o popup
+   ↓
+5. LoadCategories() - Cria botões de categoria
+   ↓
+6. LoadQueries() - Busca queries e cria cards
+                </div>
+
+                <h3>Fluxo 2: Usuário Pressiona Ctrl+Alt+Q</h3>
+                <div class="diagram">
+1. Windows intercepta o atalho
+   ↓
+2. Windows envia mensagem WM_HOTKEY
+   ↓
+3. HotkeyManager.HwndHook recebe a mensagem
+   ↓
+4. HotkeyManager dispara evento HotkeyPressed
+   ↓
+5. MainWindow.HotkeyManager_HotkeyPressed
+   ↓
+6. Verifica: janela está visível?
+   - Se SIM: Esconde
+   - Se NÃO: ShowPopup()
+                </div>
+
+                <h3>Fluxo 3: Usuário Clica em uma Query</h3>
+                <div class="diagram">
+1. Evento MouseLeftButtonUp no card
+   ↓
+2. CopyQueryToClipboard(query) é chamado
+   ↓
+3. Clipboard.SetText(query.SqlQuery)
+   ↓
+4. IncrementUsageAsync(query.Id)
+   ↓
+5. Atualiza StatusTextBlock
+   ↓
+6. await Task.Delay(500)
+   ↓
+7. this.Hide() - Esconde o popup
+                </div>
+
+                <h3>Fluxo 4: Criar Nova Query</h3>
+                <div class="diagram">
+1. Clica "+ Nova Query"
+   ↓
+2. new QueryEditorWindow(_repository)
+   ↓
+3. dialog.ShowDialog() - Modal abre
+   ↓
+4. Usuário preenche e clica "Salvar"
+   ↓
+5. Validação dos campos
+   ↓
+6. var newQuery = new QueryItem { ... }
+   ↓
+7. await _repository.AddQueryAsync(newQuery)
+   ↓
+8. DialogResult = true; Close()
+   ↓
+9. MainWindow.LoadQueries() recarrega
+                </div>
+            </section>
+
+            <!-- ATALHO GLOBAL -->
+            <section id="atalho">
+                <h2>🔐 Como Funciona o Atalho Global</h2>
+
+                <h3>Conceito</h3>
+                <p>Um <strong>atalho global</strong> funciona em <strong>qualquer lugar do Windows</strong>, mesmo que a aplicação não tenha foco.</p>
+
+                <h3>Implementação</h3>
+
+                <h4>1. Registro do Atalho</h4>
+                <pre><code>[DllImport("user32.dll")]
+private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+
+// No código:
+RegisterHotKey(windowHandle, HOTKEY_ID, MOD_CONTROL | MOD_ALT, VK_Q);</code></pre>
+
+                <h4>Parâmetros:</h4>
+                <ul>
+                    <li><code>windowHandle</code> - Handle da MainWindow</li>
+                    <li><code>HOTKEY_ID</code> - ID único (9000)</li>
+                    <li><code>fsModifiers</code> - Modificadores (Ctrl + Alt)</li>
+                    <li><code>vk</code> - Virtual Key Code da tecla (Q)</li>
+                </ul>
+
+                <h4>2. Interceptação da Mensagem</h4>
+                <pre><code>private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+{
+    const int WM_HOTKEY = 0x0312;
+    
+    if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
+    {
+        HotkeyPressed?.Invoke(this, EventArgs.Empty);
+        handled = true;
+    }
+    
+    return IntPtr.Zero;
+}</code></pre>
+
+                <h4>3. Limpeza</h4>
+                <pre><code>[DllImport("user32.dll")]
+private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+protected override void OnClosed(EventArgs e)
+{
+    _hotkeyManager.UnregisterHotkey();
+    base.OnClosed(e);
+}</code></pre>
+
+                <div class="warning-box">
+                    <strong>⚠️ Importante:</strong> Sempre desregistrar o atalho ao fechar, senão ele fica "preso" no Windows!
+                </div>
+            </section>
+
+            <!-- ARMAZENAMENTO -->
+            <section id="armazenamento">
+                <h2>💾 Armazenamento de Dados</h2>
+
+                <h3>Localização dos Arquivos</h3>
+                <div class="success-box">
+                    <strong>Todos os dados ficam em:</strong><br>
+                    <code>C:\Users\[SeuUsuario]\AppData\Roaming\QueryClipboard\</code>
+                    <ul>
+                        <li><code>settings.json</code> - Configurações do app</li>
+                        <li><code>queries.json</code> - Queries armazenadas (apenas no modo JSON)</li>
+                    </ul>
+                </div>
+
+                <h3>Modo JSON</h3>
+                <h4>Formato do arquivo queries.json:</h4>
+                <pre><code>[
+  {
+    "Id": "550e8400-e29b-41d4-a716-446655440000",
+    "Name": "Buscar Usuários Ativos",
+    "SqlQuery": "SELECT * FROM Usuarios WHERE Ativo = 1",
+    "Category": "DBA",
+    "Description": "Lista todos os usuários ativos",
+    "CreatedAt": "2025-01-15T10:30:00",
+    "LastUsed": "2025-01-15T14:20:00",
+    "UsageCount": 5
+  }
+]</code></pre>
+
+                <h4>Como funciona:</h4>
+                <ol>
+                    <li>No construtor: carrega todo o arquivo JSON na memória</li>
+                    <li>Desserializa para <code>List&lt;QueryItem&gt;</code></li>
+                    <li>Operações modificam a lista em memória</li>
+                    <li>Serializa toda a lista de volta pro JSON</li>
+                    <li>Salva o arquivo</li>
+                </ol>
+
+                <div class="success-box">
+                    <strong>✅ Backup:</strong> Basta copiar o arquivo <code>queries.json</code>!
+                </div>
+
+                <h3>Modo SQL Server</h3>
+                <h4>Script de criação da tabela:</h4>
+                <pre><code>CREATE TABLE Queries (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    Name NVARCHAR(200) NOT NULL,
+    SqlQuery NVARCHAR(MAX) NOT NULL,
+    Category NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(500),
+    CreatedAt DATETIME2 DEFAULT GETDATE(),
+    LastUsed DATETIME2 DEFAULT GETDATE(),
+    UsageCount INT DEFAULT 0
+);
+
+-- Índices para performance
+CREATE INDEX IX_Queries_Category ON Queries(Category);
+CREATE INDEX IX_Queries_LastUsed ON Queries(LastUsed DESC);</code></pre>
+
+                <h4>Connection String exemplo:</h4>
+                <pre><code>Server=localhost;Database=QueryClipboard;Integrated Security=True;TrustServerCertificate=True;</code></pre>
+            </section>
+
+            <!-- MANUTENÇÃO -->
+            <section id="manutencao">
+                <h2>🔧 Guia de Manutenção</h2>
+
+                <h3>Alterando o Atalho Global</h3>
+                <p><strong>Arquivo:</strong> <code>MainWindow.xaml.cs</code></p>
+                <p><strong>Localização:</strong> Método <code>Window_Loaded</code></p>
+
+                <pre><code>// ATUAL: Ctrl+Alt+Q
+_hotkeyManager.RegisterHotkey(windowHandle, 
+    ModifierKeys.Control | ModifierKeys.Alt, Key.Q);
+
+// EXEMPLO: Ctrl+Shift+C
+_hotkeyManager.RegisterHotkey(windowHandle, 
+    ModifierKeys.Control | ModifierKeys.Shift, Key.C);
+
+// EXEMPLO: Windows+Q
+_hotkeyManager.RegisterHotkey(windowHandle, 
+    ModifierKeys.Windows, Key.Q);</code></pre>
+
+                <h3>Adicionando Novo Campo em QueryItem</h3>
+
+                <h4>1. Atualizar o Model:</h4>
+                <pre><code>public class QueryItem
+{
+    // ... campos existentes ...
+    public string Tags { get; set; } = string.Empty;  // NOVO
+}</code></pre>
+
+                <h4>2. Atualizar JsonQueryRepository:</h4>
+                <p>Não precisa fazer nada! O JSON vai serializar automaticamente.</p>
+
+                <h4>3. Atualizar SqlServerQueryRepository:</h4>
+                <pre><code>-- Adicionar coluna na tabela
+ALTER TABLE Queries ADD Tags NVARCHAR(500);
+
+-- Atualizar queries SQL no código
+command.Parameters.AddWithValue("@Tags", query.Tags ?? string.Empty);</code></pre>
+
+                <h3>Alterando Cores do Tema</h3>
+                <p><strong>Arquivo:</strong> <code>MainWindow.xaml</code> e outros arquivos .xaml</p>
+
+                <h4>Cores principais:</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Elemento</th>
+                            <th>Cor</th>
+                            <th>Uso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Header</td>
+                            <td><span class="badge badge-info">#1976D2</span></td>
+                            <td>Topo azul</td>
+                        </tr>
+                        <tr>
+                            <td>Botão principal</td>
+                            <td><span class="badge badge-info">#1976D2</span></td>
+                            <td>Botões de ação</td>
+                        </tr>
+                        <tr>
+                            <td>Botão excluir</td>
+                            <td><span class="badge badge-error">#F44336</span></td>
+                            <td>Vermelho</td>
+                        </tr>
+                        <tr>
+                            <td>Botão editar</td>
+                            <td><span class="badge badge-success">#4CAF50</span></td>
+                            <td>Verde</td>
+                        </tr>
+                        <tr>
+                            <td>Fundo claro</td>
+                            <td>#F5F5F5</td>
+                            <td>Áreas secundárias</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- EVOLUÇÃO -->
+            <section id="evolucao">
+                <h2>🚀 Guia de Evolução</h2>
+
+                <h3>Funcionalidades Sugeridas</h3>
+
+                <h4>1. Syntax Highlighting no Editor</h4>
+                <div class="highlight-box">
+                    <strong>Biblioteca:</strong> AvalonEdit
+                    <pre><code>&lt;PackageReference Include="AvalonEdit" Version="6.3.0.90" /&gt;</code></pre>
+                </div>
+
+                <h4>2. Importar/Exportar Queries</h4>
+                <pre><code>private async void ExportButton_Click(object sender, RoutedEventArgs e)
+{
+    var saveDialog = new Microsoft.Win32.SaveFileDialog
+    {
+        Filter = "JSON files (*.json)|*.json",
+        DefaultExt = ".json"
+    };
+    
+    if (saveDialog.ShowDialog() == true)
+    {
+        var queries = await _repository.GetAllQueriesAsync();
+        var json = JsonConvert.SerializeObject(queries, Formatting.Indented);
+        File.WriteAllText(saveDialog.FileName, json);
+    }
+}</code></pre>
+
+                <h4>3. Sistema de Tags</h4>
+                <pre><code>public class QueryItem
+{
+    // ... campos existentes ...
+    public List&lt;string&gt; Tags { get; set; } = new();
+}</code></pre>
+
+                <h4>4. Ícone na System Tray</h4>
+                <pre><code>private NotifyIcon? _notifyIcon;
+
+public MainWindow()
+{
+    InitializeComponent();
+    
+    _notifyIcon = new NotifyIcon
+    {
+        Icon = SystemIcons.Application,
+        Visible = true,
+        Text = "Query Clipboard"
+    };
+    
+    _notifyIcon.DoubleClick += (s, e) => ShowPopup();
+}</code></pre>
+
+                <h4>5. Dark Mode</h4>
+                <p>Criar ResourceDictionaries separados para temas Light e Dark</p>
+
+                <h4>6. Validação de SQL</h4>
+                <div class="highlight-box">
+                    <strong>Biblioteca:</strong> Microsoft.SqlServer.TransactSql.ScriptDom
+                </div>
+
+                <h4>7. Conectar Direto no Banco</h4>
+                <p>Executar a query direto do app e mostrar resultados em DataGrid</p>
+
+                <h4>8. Histórico de Uso</h4>
+                <p>Criar nova tabela QueryHistory para rastrear todas as execuções</p>
+            </section>
+
+            <!-- TROUBLESHOOTING -->
+            <section id="troubleshooting">
+                <h2>🐛 Troubleshooting</h2>
+
+                <h3>Problema: App não abre</h3>
+                <div class="error-box">
+                    <strong>Possíveis causas:</strong>
+                    <ul>
+                        <li>.NET 8 não instalado</li>
+                        <li>Arquivo de configuração corrompido</li>
+                        <li>Problema com atalho</li>
+                    </ul>
+                </div>
+
+                <h4>Solução:</h4>
+                <pre><code>// Adicionar try-catch no App.xaml.cs
+protected override void OnStartup(StartupEventArgs e)
+{
+    base.OnStartup(e);
+    
+    AppDomain.CurrentDomain.UnhandledException += (s, args) =>
+    {
+        var ex = (Exception)args.ExceptionObject;
+        MessageBox.Show($"Erro fatal: {ex.Message}\n\n{ex.StackTrace}");
+    };
+}</code></pre>
+
+                <h3>Problema: Atalho não funciona</h3>
+                <div class="warning-box">
+                    <strong>Causa:</strong> Outro app já registrou Ctrl+Alt+Q
+                </div>
+
+                <h4>Solução:</h4>
+                <pre><code>try
+{
+    _hotkeyManager.RegisterHotkey(windowHandle, modifiers, key);
+}
+catch (InvalidOperationException ex)
+{
+    var result = MessageBox.Show(
+        "O atalho Ctrl+Alt+Q já está em uso. Deseja tentar Ctrl+Alt+W?",
+        "Conflito de Atalho",
+        MessageBoxButton.YesNo);
+    
+    if (result == MessageBoxResult.Yes)
+    {
+        _hotkeyManager.RegisterHotkey(windowHandle, modifiers, Key.W);
+    }
+}</code></pre>
+
+                <h3>Problema: Queries não salvam (JSON)</h3>
+                <div class="error-box">
+                    <strong>Causa:</strong> Permissões na pasta AppData
+                </div>
+
+                <h4>Solução:</h4>
+                <pre><code>try
+{
+    Directory.CreateDirectory(appDataPath);
+    File.WriteAllText(_filePath, json);
+}
+catch (UnauthorizedAccessException)
+{
+    // Tentar pasta alternativa
+    var tempPath = Path.Combine(Path.GetTempPath(), "QueryClipboard");
+    Directory.CreateDirectory(tempPath);
+    _filePath = Path.Combine(tempPath, "queries.json");
+}</code></pre>
+
+                <h3>Problema: Não conecta no SQL Server</h3>
+                <div class="error-box">
+                    <strong>Causa:</strong> Connection string errada ou SQL Server não rodando
+                </div>
+
+                <h4>Diagnóstico:</h4>
+                <pre><code>try
+{
+    using var connection = new SqlConnection(connectionString);
+    await connection.OpenAsync();
+    MessageBox.Show("Conexão OK!");
+}
+catch (SqlException ex)
+{
+    switch (ex.Number)
+    {
+        case 53:
+        case 1231:
+            MessageBox.Show("SQL Server não encontrado.");
+            break;
+        case 18456:
+            MessageBox.Show("Erro de autenticação.");
+            break;
+        default:
+            MessageBox.Show($"Erro SQL {ex.Number}: {ex.Message}");
+            break;
+    }
+}</code></pre>
+            </section>
+
+            <!-- RECURSOS ADICIONAIS -->
+            <section>
+                <h2>📚 Recursos Adicionais</h2>
+
+                <h3>Documentação Oficial</h3>
+                <ul>
+                    <li><a href="https://learn.microsoft.com/en-us/dotnet/desktop/wpf/" target="_blank">WPF Documentation</a></li>
+                    <li><a href="https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8" target="_blank">.NET 8 Documentation</a></li>
+                    <li><a href="https://learn.microsoft.com/en-us/sql/connect/ado-net/microsoft-ado-net-sql-server" target="_blank">SQL Server Client</a></li>
+                </ul>
+
+                <h3>Bibliotecas Úteis</h3>
+                <ul>
+                    <li><strong>AvalonEdit</strong> - Editor de código com syntax highlighting</li>
+                    <li><strong>Extended WPF Toolkit</strong> - Controles WPF extras</li>
+                    <li><strong>Hardcodet NotifyIcon</strong> - System tray icon melhorado</li>
+                    <li><strong>MahApps.Metro</strong> - Temas modernos para WPF</li>
+                </ul>
+
+                <h3>Ferramentas</h3>
+                <ul>
+                    <li><strong>Snoop</strong> - Debugger visual para WPF</li>
+                    <li><strong>XAML Styler</strong> - Formatador de XAML</li>
+                    <li><strong>ResXManager</strong> - Gerenciador de recursos/localização</li>
+                </ul>
+            </section>
+
+            <!-- CONCLUSÃO -->
+            <section>
+                <h2>🎓 Conclusão</h2>
+
+                <div class="success-box">
+                    <h3>Este sistema foi projetado para ser:</h3>
+                    <ul>
+                        <li>✅ <strong>Simples</strong> - Código limpo e bem organizado</li>
+                        <li>✅ <strong>Extensível</strong> - Fácil adicionar funcionalidades</li>
+                        <li>✅ <strong>Manutenível</strong> - Separação clara de responsabilidades</li>
+                        <li>✅ <strong>Testável</strong> - Interfaces permitem testes unitários</li>
+                    </ul>
+                </div>
+
+                <h3>Padrões Aplicados</h3>
+                <ul>
+                    <li>Repository Pattern</li>
+                    <li>Dependency Injection (manual)</li>
+                    <li>Event-Driven Architecture (atalhos)</li>
+                    <li>MVVM (parcial, pode evoluir)</li>
+                </ul>
+
+                <h3>Próximos Passos Sugeridos</h3>
+                <ol>
+                    <li>Adicionar testes unitários</li>
+                    <li>Implementar MVVM completo</li>
+                    <li>Criar instalador (WiX ou Inno Setup)</li>
+                    <li>Publicar no GitHub</li>
+                </ol>
+
+                <div class="highlight-box" style="text-align: center; font-size: 1.2em; margin-top: 30px;">
+                    <strong>Qualquer dúvida, consulte esta documentação ou o código-fonte! 🚀</strong>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p><strong>Query Clipboard</strong> - Documentação Técnica Completa</p>
+            <p>Versão 1.0 | © 2025 | Desenvolvido com ❤️ em .NET 8 + WPF</p>
+        </footer>
+    </div>
+
+    <a href="#" class="back-to-top">↑</a>
+
+    <script>
+        // Smooth scroll para links âncora
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Mostrar/esconder botão voltar ao topo
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.style.display = 'flex';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

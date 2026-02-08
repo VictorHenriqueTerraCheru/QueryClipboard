@@ -1,0 +1,166 @@
+<Window x:Class="QueryClipboard.Views.QueryEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Editor de Query"
+        Height="680"
+        Width="850"
+        MinHeight="500"
+        MinWidth="600"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResizeWithGrip"
+        Background="{StaticResource BgBrush}"
+        Topmost="True"
+        FontFamily="Segoe UI">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Mini header accent -->
+        <Border Grid.Row="0" Height="4">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="{StaticResource AccentColor}" Offset="0"/>
+                    <GradientStop Color="{StaticResource AccentDarkColor}" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="24,20,24,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Nome -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,14">
+                <TextBlock Text="Nome da Query"
+                           FontSize="12"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           Margin="0,0,0,6"/>
+                <TextBox x:Name="NameTextBox"
+                         Style="{StaticResource ModernTextBoxStyle}"
+                         FontSize="14"/>
+            </StackPanel>
+
+            <!-- Categoria e Descricao -->
+            <Grid Grid.Row="1" Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Categoria"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               Margin="0,0,0,6"/>
+                    <ComboBox x:Name="CategoryComboBox"
+                              Style="{StaticResource ModernComboBoxStyle}"
+                              IsEditable="True"
+                              Height="36"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Descricao (opcional)"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="DescriptionTextBox"
+                             Style="{StaticResource ModernTextBoxStyle}"
+                             FontSize="14"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- SQL Query - ocupa todo o espaco restante -->
+            <Grid Grid.Row="2" Margin="0,0,0,16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,6">
+                    <TextBlock Text="SQL Query"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <TextBlock x:Name="LineCountText"
+                               FontSize="11"
+                               Foreground="{StaticResource MutedBrush}"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Border Grid.Row="1"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Background="White">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Numeros de linha -->
+                        <Border Grid.Column="0"
+                                Background="{StaticResource CodeBgBrush}"
+                                Padding="8,12,8,12"
+                                CornerRadius="8,0,0,8">
+                            <ScrollViewer x:Name="LineNumbersScroll"
+                                          VerticalScrollBarVisibility="Hidden"
+                                          HorizontalScrollBarVisibility="Hidden">
+                                <TextBlock x:Name="LineNumbersBlock"
+                                           FontFamily="Consolas"
+                                           FontSize="12"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           TextAlignment="Right"
+                                           MinWidth="24"/>
+                            </ScrollViewer>
+                        </Border>
+
+                        <!-- Editor de query -->
+                        <TextBox Grid.Column="1"
+                                 x:Name="QueryTextBox"
+                                 FontFamily="Consolas"
+                                 FontSize="12"
+                                 Padding="8,12"
+                                 AcceptsReturn="True"
+                                 AcceptsTab="True"
+                                 TextWrapping="NoWrap"
+                                 HorizontalScrollBarVisibility="Auto"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                 TextChanged="QueryTextBox_TextChanged"
+                                 ScrollViewer.ScrollChanged="QueryTextBox_ScrollChanged"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Botoes -->
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Content="Cancelar"
+                        Click="CancelButton_Click"
+                        Style="{StaticResource GhostButtonStyle}"
+                        Width="100"
+                        Margin="0,0,10,0"/>
+                <Button Content="Salvar"
+                        Click="SaveButton_Click"
+                        Style="{StaticResource AccentButtonStyle}"
+                        Width="100"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

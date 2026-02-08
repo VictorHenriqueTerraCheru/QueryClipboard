@@ -1,0 +1,26 @@
+## .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache
+*.log
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+## NuGet
+packages/
+*.nupkg
+
+## IDE
+.idea/
+*.swp
+*~
+
+## Claude Code
+.claude/
